@@ -2,7 +2,7 @@
 <name>PKG-vsdk-helloworld-code</name>
 <source>
 <vault></vault>
-<author>firstname.lastname@example.com</author>
+<author>sameer@smehta.ca</author>
 </source>
 <summary>The vsdk-helloworld project source code.</summary>
 <description>This VPK contains the Vault Java SDK source code for the vsdk-helloworld project.</description>
