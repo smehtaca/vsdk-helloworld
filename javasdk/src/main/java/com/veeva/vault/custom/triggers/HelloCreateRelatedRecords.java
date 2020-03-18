@@ -20,6 +20,7 @@ public class HelloCreateRelatedRecords implements RecordTrigger {
         // Get an instance of the Query Service used to find if record with same name exists
         RecordService recordService = ServiceLocator.locate(RecordService.class);
 
+        // Loop over created records.
         for (RecordChange inputRecord : recordTriggerContext.getRecordChanges()) {
             List<Record> recordList = VaultCollections.newList();
 
@@ -29,18 +30,23 @@ public class HelloCreateRelatedRecords implements RecordTrigger {
             // Only create Related To records if there is a record that was found.
             if(recordName.startsWith("Hello") && recordId != null) {
 
+                // Crete first related record with name "Related to 'Hello name' 1"
                 Record firstRelatedRecord = recordService.newRecord("vsdk_hello_world__c");
                 firstRelatedRecord.setValue("name__v", "Related to '" + recordName + "' 1");
+                // This field is used to create the relation between the original record and this one.
                 firstRelatedRecord.setValue("related_to__c", recordId);
 
+                // Create second related record.
                 Record secondRelatedRecord = recordService.newRecord("vsdk_hello_world__c");
                 secondRelatedRecord.setValue("name__v", "Related to '" + recordName + "' 2");
+                // This field is used to create the relation between the original record and this one.
                 secondRelatedRecord.setValue("related_to__c", recordId);
 
+                // Add to our list.
                 recordList.add(firstRelatedRecord);
                 recordList.add(secondRelatedRecord);
             }
-            // List errors.
+            // Save and list any errors that may have occured.
             recordService.batchSaveRecords(recordList).onErrors(batchOperationErrors -> {
                 batchOperationErrors.stream().findFirst().ifPresent(error -> {
                     String errMsg = error.getError().getMessage();
